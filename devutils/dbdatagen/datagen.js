@@ -298,12 +298,10 @@ function saveEvent(eventObj, cb) {
 //Creates and returns a fully-filled event report using the psased in template
 //and filling in any missing data with generated data.
 function createReport(template) {
-  randomString = genRandomString();
-  randomEvent = getRandomEvent();
   reportObj = {};
   reportObj.type = template.type || "other";
   reportObj.approvalStatus = template.approvalStatus || false;
-  reportObj.student = getUIDFromRef("student", template.studentref);
+  reportObj.student = getUIDFromRef("people", template.studentref);
 
   if(reportObj.type == "other") return createOtherReport(reportObj, template);
   else return createEventReport(reportObj, template);
@@ -328,9 +326,9 @@ function createEventReport(reportObj, template) {
 // Returns a "promise of promises".
 function createReports(reportList) {
   var thePromises = [];
-  reportList.forEach(function(report){
+  reportList.forEach(function(report) {
     var deferred = Q.defer();
-    saveReport(report, function(result){
+    saveReport(report, function(result) {
       if(result.uid) genOutput.reports.push(result.uid);
       deferred.resolve(result);
     });
@@ -342,7 +340,35 @@ function createReports(reportList) {
 // Handles the firebase-admin calls add the report data to '/reports'
 // Returns the report object with the UID key filled if successfull.
 function saveReport(reportObj, cb) {
+  logger.log("Saving report:", reportObj)
+  var reportsRef = db.ref("reports/");
+  var newReportsRef = reportsRef.push();
+  var dbObject = {};
+  if(reportObj.type == "event") {
+    dbObject = {
+      type: reportObj.type,
+      approvalStatus: reportObj.approvalStatus,
+      student: reportObj.student,
+      event: reportObj.event
+    }
+  } else {
+    dbObject = {
+      type: reportObj.type,
+      approvalStatus: reportObj.approvalStatus,
+      student: reportObj.student,
+      category: reportObj.category,
+      datetime: reportObj.datetime,
+      location: reportObj.location,
+      title: reportObj.title,
+      description: reportObj.description
+    }
+  }
+  newReportsRef.set(dbObject, function(error) {
+    reportObj.uid = newReportsRef.key;
+    logger.log("Done creating report ", reportObj.title, " with UID ", reportObj.uid)
 
+    cb(reportObj)
+  });
 }
 
 /*******************************************************************************
