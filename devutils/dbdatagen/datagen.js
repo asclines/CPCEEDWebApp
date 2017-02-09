@@ -56,6 +56,7 @@ function getDateJSONFromString(dateString){
 function getUIDFromRef(type, ref) {
   if(!ref) return genRandomString();
   if(type === "people") return((peopleRefToUIDs[ref]) ? peopleRefToUIDs[ref] : ref);
+  if(type == "event") return((eventsRefToUIDs[ref]) ? eventsRefToUIDs[ref] : ref);
 
 }
 
