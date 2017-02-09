@@ -290,6 +290,8 @@ function createReport(template) {
  randomEvent = getRandomEvent();
  reportObj = {};
  reportObj.type = template.type || "other";
+ reportObj.approvalStatus = template.approvalStatus || false;
+ reportObj.student = getUIDFromRef("student", template.studentref);
 
  if(reportObj.type == "other") return createOtherReport(reportObj, template);
  else return createEventReport(reportObj, template);
