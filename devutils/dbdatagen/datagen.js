@@ -275,6 +275,28 @@ function saveEvent(eventObj, cb) {
   })
 }
 
+/*******************************************************************************
+ * Creating Reports
+ *******************************************************************************/
+//Creates and returns a fully-filled event report using the psased in template
+//and filling in any missing data with generated data.
+function createReport(template) {
+ randomString = genRandomString();
+ randomEvent = getRandomEvent();
+ reportObj = {};
+ reportObj.type = template.type || "other";
+
+ if(reportObj.type == "other") return createOtherReport(template);
+ else return createEventReport(template);
+}
+
+function createOtherReport(template){
+
+}
+
+function createEventReport(template){
+  
+}
 
 /*******************************************************************************
  * Deleting Data
