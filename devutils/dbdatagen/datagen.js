@@ -131,6 +131,7 @@ function generateData(templateFile) {
   var template = jsonfile.readFileSync(templateFile);
   var personList = [];
   var eventList = [];
+  var reportList = [];
   template.people.forEach(function(person) {
     personList.push(createPerson(person));
   });
@@ -139,10 +140,17 @@ function generateData(templateFile) {
     eventList.push(createEvent(eventObj))
   });
 
+  template.reports.forEach(function(reportObj) {
+    reportList.push(createReport(reportObj))
+  });
+
+
   createUsers(personList).then(function() {
     createEvents(eventList).then(function() {
-      jsonfile.writeFile("gen-uids.json", genOutput)
-      closeFirebase();
+      createReports(reportList).then(function() {
+        jsonfile.writeFile("gen-uids.json", genOutput)
+        closeFirebase();
+      })
     })
   });
 }
@@ -314,6 +322,18 @@ function createOtherReport(reportObj, template){
 function createEventReport(reportObj, template){
   reportObj.event = ((template.eventref) ? getUIDFromRef("event",template.eventref) : genRandomString());
   return reportObj;
+}
+
+//Calls #saveReport on every report in the list and gathers all the promises.
+// Returns a "promise of promises".
+function createReports(reportList) {
+
+}
+
+// Handles the firebase-admin calls add the report data to '/reports'
+// Returns the report object with the UID key filled if successfull.
+function saveReport(reportObj, cb) {
+
 }
 
 /*******************************************************************************
