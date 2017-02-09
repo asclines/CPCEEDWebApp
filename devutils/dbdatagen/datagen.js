@@ -302,7 +302,13 @@ function createReport(template) {
 }
 
 function createOtherReport(reportObj, template){
-  reportObj.category = template.category ||
+  var randomReport = getRandomReport();
+  reportObj.category = template.category || randomReport.category;
+  reportObj.datetime = ((template.datetime) ? getDateJSONFromString(template.datetime) : getDateJSONFromString(randomReport.datetime));
+  reportObj.location = template.location || randomReport.location;
+  reportObj.title = template.title || randomReport.title;
+  reportObj.description = template.description || randomReport.description;
+  return reportObj;
 }
 
 function createEventReport(reportObj, template){
