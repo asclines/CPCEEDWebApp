@@ -42,9 +42,9 @@ function onError(err) {
 //Expects the dateString to be in format: YYYY:MM:DD:HH:MM
 //Returns a string representing the Date using toISOString().
 //Intended for use by JSON.stringify().
-function getDateJSONFromString(dateString){
+function getDateJSONFromString(dateString) {
   var dateArr = dateString.split(":");
-  for (var i = 0; i < dateArr.length; i++){
+  for(var i = 0; i < dateArr.length; i++) {
     dateArr[i] = parseInt(dateArr[i], 10);
   }
   var date = new Date(dateArr[0], dateArr[1], dateArr[2], dateArr[3], dateArr[4]);
@@ -189,7 +189,7 @@ function generateStudentData(user, template) {
 // Calls #createUser on every person in the list and gathers all promises.
 // Returns a "promise of promises".
 function createUsers(personList) {
-  var the_promises = [];
+  var thePromises = [];
   personList.forEach(function(person) {
     var deferred = Q.defer();
     createUser(person, function(error, person) {
@@ -202,9 +202,9 @@ function createUsers(personList) {
       }
       deferred.resolve(person)
     })
-    the_promises.push(deferred.promise);
+    thePromises.push(deferred.promise);
   });
-  return Q.all(the_promises);
+  return Q.all(thePromises);
 }
 
 // Handles the firebase-admin calls to to creating the user and adding user data
@@ -243,12 +243,12 @@ function createEvent(template) {
   randomString = genRandomString();
   randomEvent = getRandomEvent();
   eventObj = {};
-  eventObj.creator = getUIDFromRef("people",template.ref);
+  eventObj.creator = getUIDFromRef("people", template.ref);
   eventObj.contact = ((template.contact) ? template.contact : eventObj.creator);
   eventObj.category = ((template.category) ? template.category : "other");
   eventObj.datetime = ((template.datetime) ? getDateJSONFromString(template.datetime) : getDateJSONFromString(randomEvent.datetime));
   eventObj.location = ((template.location) ? template.location : randomEvent.location);
-  eventObj.title = ((template.title) ? template.title : randomEvent.title );
+  eventObj.title = ((template.title) ? template.title : randomEvent.title);
   eventObj.description = ((template.description) ? template.description : randomEvent.description);
 
   return eventObj;
@@ -257,16 +257,16 @@ function createEvent(template) {
 //Calls #saveEvent on every event in the list and gathers all the promises.
 // Returns a "promise of promises".
 function createEvents(eventList) {
-  var the_promises = [];
+  var thePromises = [];
   eventList.forEach(function(event) {
     var deferred = Q.defer();
     saveEvent(event, function(result) {
       if(result.uid) genOutput.events.push(result.uid);
       deferred.resolve(result);
     })
-    the_promises.push(deferred.promise);
+    thePromises.push(deferred.promise);
   });
-  return Q.all(the_promises);
+  return Q.all(thePromises);
 }
 
 // Handles the firebase-admin calls add the event data to '/events'
@@ -298,18 +298,18 @@ function saveEvent(eventObj, cb) {
 //Creates and returns a fully-filled event report using the psased in template
 //and filling in any missing data with generated data.
 function createReport(template) {
- randomString = genRandomString();
- randomEvent = getRandomEvent();
- reportObj = {};
- reportObj.type = template.type || "other";
- reportObj.approvalStatus = template.approvalStatus || false;
- reportObj.student = getUIDFromRef("student", template.studentref);
+  randomString = genRandomString();
+  randomEvent = getRandomEvent();
+  reportObj = {};
+  reportObj.type = template.type || "other";
+  reportObj.approvalStatus = template.approvalStatus || false;
+  reportObj.student = getUIDFromRef("student", template.studentref);
 
- if(reportObj.type == "other") return createOtherReport(reportObj, template);
- else return createEventReport(reportObj, template);
+  if(reportObj.type == "other") return createOtherReport(reportObj, template);
+  else return createEventReport(reportObj, template);
 }
 
-function createOtherReport(reportObj, template){
+function createOtherReport(reportObj, template) {
   var randomReport = getRandomReport();
   reportObj.category = template.category || randomReport.category;
   reportObj.datetime = ((template.datetime) ? getDateJSONFromString(template.datetime) : getDateJSONFromString(randomReport.datetime));
@@ -319,15 +319,24 @@ function createOtherReport(reportObj, template){
   return reportObj;
 }
 
-function createEventReport(reportObj, template){
-  reportObj.event = ((template.eventref) ? getUIDFromRef("event",template.eventref) : genRandomString());
+function createEventReport(reportObj, template) {
+  reportObj.event = ((template.eventref) ? getUIDFromRef("event", template.eventref) : genRandomString());
   return reportObj;
 }
 
 //Calls #saveReport on every report in the list and gathers all the promises.
 // Returns a "promise of promises".
 function createReports(reportList) {
-
+  var thePromises = [];
+  reportList.forEach(function(report){
+    var deferred = Q.defer();
+    saveReport(report, function(result){
+      if(result.uid) genOutput.reports.push(result.uid);
+      deferred.resolve(result);
+    });
+    thePromises.push(deferred.promise);
+  });
+  return Q.all(thePromises);
 }
 
 // Handles the firebase-admin calls add the report data to '/reports'
