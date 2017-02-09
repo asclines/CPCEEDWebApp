@@ -37,5 +37,17 @@
       "title" : "Graduation",
       "description" : "TTU Commencemnt for the College of Engineering"
     }
+  ],
+  "reports" : [
+    {
+      "type" : "other",
+      "approvalStatus" : true,
+      "studentref" : "somestudentother",
+      "category" : "mentor",
+      "datetime" : "2017:05:20:09:00",
+      "location" : "Library",
+      "title" : "Mentor Meeting",
+      "description" : "Met with mentor"
+    }
   ]
 }

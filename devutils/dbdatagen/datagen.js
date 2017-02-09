@@ -87,6 +87,10 @@ function getRandomEvent() {
   return getRandomItem(defaultData.events)
 }
 
+function getRandomReport() {
+  return getRandomItem(defaultData.reports)
+}
+
 
 
 
@@ -298,7 +302,7 @@ function createReport(template) {
 }
 
 function createOtherReport(reportObj, template){
-
+  reportObj.category = template.category ||
 }
 
 function createEventReport(reportObj, template){
