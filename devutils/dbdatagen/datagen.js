@@ -340,7 +340,6 @@ function createReports(reportList) {
 // Handles the firebase-admin calls add the report data to '/reports'
 // Returns the report object with the UID key filled if successfull.
 function saveReport(reportObj, cb) {
-  logger.log("Saving report:", reportObj)
   var reportsRef = db.ref("reports/");
   var newReportsRef = reportsRef.push();
   var dbObject = {};
@@ -376,6 +375,7 @@ function saveReport(reportObj, cb) {
  *******************************************************************************/
 // Iterates through the passed in file to get the UIDs of items that need to be
 // removed and creates a map of them and their corresponding removal functions.
+var erUIDs = {}; //Event or Report UIDS
 function deleteData(uidFile) {
   logger.info("Preparing to delete items.");
   var deleteMap = {};
@@ -387,8 +387,15 @@ function deleteData(uidFile) {
   }
   jsonfile.readFile(uidFile, function(err, uids) {
     if(err) return onError(err);
+    uids.events.forEach(function(uid){
+      erUIDs[uid] = "event";
+    })
+    uids.reports.forEach(function(uid){
+      erUIDs[uid] = "report";
+    })
     addListToDeleteMap(uids.people, deleteUser);
-    addListToDeleteMap(uids.events, deleteEvent);
+    addListToDeleteMap(uids.events, deleteEoR);
+    addListToDeleteMap(uids.reports, deleteEoR)
     deleteAllInMap(deleteMap);
   });
 
@@ -442,15 +449,19 @@ function deleteUser(uid, cb) {
     });
 }
 
-// Handles connecting to Firebase and deleting the event data
-function deleteEvent(uid, cb) {
-  logger.log("Deleting event with UID:", uid)
-  var eventsRef = db.ref("events/")
-  eventsRef.update({
+// Handles connecting to Firebase and deleting the event or report data
+function deleteEoR(uid, cb) {
+  var type = erUIDs[uid];
+  logger.log("Deleting",type,"with UID:", uid)
+  var ref = {};
+  if (type == "event") ref = db.ref("events/");
+  else ref = db.ref("reports/")
+
+  ref.update({
     [uid]: null
   }, function(error) {
-    if(error) logger.warn("Error removing event data for UID:", uid, error);
-    else logger.log("Removed event data");
+    if(error) logger.warn("Error removing", type, "data for UID:", uid, error);
+    else logger.log("Removed", type, "data");
     cb(uid);
   })
 
