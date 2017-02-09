@@ -56,6 +56,7 @@ function getDateJSONFromString(dateString){
 function getUIDFromRef(type, ref) {
   if(!ref) return genRandomString();
   if(type === "people") return((peopleRefToUIDs[ref]) ? peopleRefToUIDs[ref] : ref);
+
 }
 
 
@@ -117,7 +118,8 @@ var peopleRefToUIDs = {}; //Used to map a persons REF to their user UID
 var eventsRefToUIDs = {}; // ^^^ with events
 var genOutput = {
   people: [],
-  events: []
+  events: [],
+  reports: []
 }
 
 function generateData(templateFile) {
@@ -228,7 +230,7 @@ function createEvent(template) {
   randomString = genRandomString();
   randomEvent = getRandomEvent();
   eventObj = {};
-  eventObj.creator = getUIDFromRef(template.ref);
+  eventObj.creator = getUIDFromRef("people",template.ref);
   eventObj.contact = ((template.contact) ? template.contact : eventObj.creator);
   eventObj.category = ((template.category) ? template.category : "other");
   eventObj.datetime = ((template.datetime) ? getDateJSONFromString(template.datetime) : getDateJSONFromString(randomEvent.datetime));
@@ -269,6 +271,8 @@ function saveEvent(eventObj, cb) {
     description: eventObj.description
   }, function(error) {
     eventObj.uid = newEventRef.key;
+    if(eventObj.ref) eventsRefToUIDs[eventObj.ref] = eventObj.uid;
+
     logger.log("Done creating event ", eventObj.title, " with UID ", eventObj.uid)
 
     cb(eventObj)
@@ -286,16 +290,17 @@ function createReport(template) {
  reportObj = {};
  reportObj.type = template.type || "other";
 
- if(reportObj.type == "other") return createOtherReport(template);
- else return createEventReport(template);
+ if(reportObj.type == "other") return createOtherReport(reportObj, template);
+ else return createEventReport(reportObj, template);
 }
 
-function createOtherReport(template){
+function createOtherReport(reportObj, template){
 
 }
 
-function createEventReport(template){
-  
+function createEventReport(reportObj, template){
+  reportObj.event = ((template.eventref) ? getUIDFromRef("event",template.eventref) : genRandomString());
+  return reportObj;
 }
 
 /*******************************************************************************

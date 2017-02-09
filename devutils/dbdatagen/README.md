@@ -56,6 +56,7 @@ This snippet contains a skeleton of what is **required** for the script with two
     }
   ],
   "events":[],
+  "reports":[]
 }
 ```
 
@@ -88,6 +89,7 @@ And this snippet contains **all** the info you can override. The values do **not
   ],
   "events" : [
     {
+      "ref" : "linusevent",
       "creator" : "Linus Torvalds",
       "contact" : "Chris Anderson",
       "category" : "other",
