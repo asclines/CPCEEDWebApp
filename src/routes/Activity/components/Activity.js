@@ -1,13 +1,44 @@
 import React from 'react';
 import RequireAuth from 'components/Auth/RequireAuth.js';
 
+//returns the value used to display activity in list
+function ParseActivity(props) {
+	//currently simply returns the item as is because the array expected is a simple literal string
+	return (
+		<tr>
+			<td>pending</td>
+			<td>{props.activity}</td>
+		</tr>
+	);
+}
+
+//Generate the list of activities to view depending on the list provided
+//todo: figure out how to make react.js get functions
+function ActivityList(props) {
+	return (
+		<table style={props.style}>
+			<thead>
+				<tr>
+					<th>Status</th>
+					<th width={'80%'}>Activity</th>
+				</tr>
+			</thead>
+			<tbody>
+				{props.generate.map(function(value, iter) {
+					return <ParseActivity activity={value} key={iter}/>;
+				})}
+			</tbody>
+		</table>
+	);
+}
+
+
 
 class Activity extends React.Component {
     //The constructor for activity page.
     //Accepts properties:
     //  user - The user this activity page is for
-    constructor(props)
-    {
+    constructor(props) {
         super(props)
 
         //The list of all activities that can be associated with the user provided
@@ -19,8 +50,7 @@ class Activity extends React.Component {
     }
 
     //returns every pending activities of the user
-    getPendingActivities(user)
-    {
+    getPendingActivities(user) {
         //currently returns a temporary list that represents the pending activities of the user
         return [
             'tempact1', 'tempact2', 'tempact3', 'tempact4'
@@ -28,56 +58,28 @@ class Activity extends React.Component {
     }
 
     //returns every activities done by the user
-    getHistoryOfActivities(user)
-    {
+    getHistoryOfActivities(user) {
         //currently returns a temporary list that represents all activities done by user
         return [
-            'tempact7', 'tempact9'
-        ]
+            'tempact1', 'tempact2', 'tempact3', 'tempact4', 'tempact5'
+        ];
     }
 
     //returns list of all activities stored in the database
     //may be moved to a more general class as this is too general for the scope of activity.
-    getEveryActivities()
-    {
+    getEveryActivities() {
         //currently returns a temporary list that represents all activities stored in the database
         return [
             'tempact1', 'tempact2', 'tempact3', 'tempact4', 'tempact5', 'tempact6', 'tempact7', 'tempact9'
         ];
     }
 
-    //returns the value used to display activity in list
-    parseActivity(props)
-    {
-        //currently simply returns the item as is because the array expected is a simple literal string
-        return <ul>props.activity</ul>;
-    }
-
-    //Generate the list of activities to view depending on the list provided
-    //todo: figure out how to make react.js get functions
-    generateListOfActivities(props)
-    {
-        /*
-        return (
-            <li>
-                {props.list.map(function(value, index, array){
-                    return <parseActivity activity={value} />
-                })}
-                <ul>test</ul>
-            </li>
-        );
-        */
-
-        return (<h3>test</h3>);
-    }
-
     //The render function for students
-    renderStudent()
-    {
+    renderStudent() {
         return (
-            <div>
+            <div style={{margin: 'auto'}}>
                 <h2>This is the activity page for students</h2>
-                <generateListOfActivities list={this.activities.pending} />
+                <ActivityList generate={this.activities.pending} style={{margin: 'auto'}}/>
             </div>
         );
     }
