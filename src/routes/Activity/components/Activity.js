@@ -1,14 +1,18 @@
 import React from 'react';
 import RequireAuth from 'components/Auth/RequireAuth.js';
 
+import Table from 'grommet/components/Table';
+import TableRow from 'grommet/components/TableRow';
+
+
 //returns the value used to display activity in list
 function ParseActivity(props) {
 	//currently simply returns the item as is because the array expected is a simple literal string
 	return (
-		<tr>
+		<TableRow>
 			<td>pending</td>
 			<td>{props.activity}</td>
-		</tr>
+		</TableRow>
 	);
 }
 
@@ -16,7 +20,7 @@ function ParseActivity(props) {
 //todo: figure out how to make react.js get functions
 function ActivityList(props) {
 	return (
-		<table style={props.style}>
+		<Table style={props.style}>
 			<thead>
 				<tr>
 					<th>Status</th>
@@ -28,7 +32,7 @@ function ActivityList(props) {
 					return <ParseActivity activity={value} key={iter}/>;
 				})}
 			</tbody>
-		</table>
+		</Table>
 	);
 }
 
