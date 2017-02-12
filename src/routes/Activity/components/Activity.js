@@ -12,7 +12,7 @@ function ParseActivity(props) {
     return (
         <TableRow>
             <td>{props.status}</td>
-            <td>{props.activity}</td>
+            <td><center>{props.activity}</center></td>
         </TableRow>
     );
 }
@@ -39,7 +39,7 @@ function ActivityList(props) {
     );
 }
 
-class Activity extends React.Component {
+class ActivityPage extends React.Component {
 
     //The constructor for activity page.
     //Accepts properties:
@@ -74,8 +74,11 @@ class Activity extends React.Component {
     //The render function for students
     renderStudent() {
         return (
+            <div>
+            <h2 style={{margin: '0px'}}>Activity Report</h2>
             <div style={{margin: 'auto'}}>
                 <ActivityList generate={this.activities} />
+            </div>
             </div>
         );
     }
@@ -92,4 +95,4 @@ const requiredState = {
     viewActivity: true
 };
 
-export default RequireAuth(Activity, requiredState);
+export default RequireAuth(ActivityPage, requiredState);
