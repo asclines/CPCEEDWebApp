@@ -1,4 +1,5 @@
 import React from 'react';
+
 import RequireAuth from 'components/Auth/RequireAuth.js';
 
 import Table from 'grommet/components/Table';
@@ -86,4 +87,9 @@ class Activity extends React.Component {
     }
 }
 
-export default RequireAuth(Activity);
+// Defining the permissions required to access this component
+const requiredState = {
+    viewActivity: true
+};
+
+export default RequireAuth(Activity, requiredState);
