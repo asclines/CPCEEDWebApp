@@ -39,6 +39,10 @@ function ActivityList(props) {
     );
 }
 
+class Activity {
+
+}
+
 class ActivityPage extends React.Component {
 
     //The constructor for activity page.
@@ -75,10 +79,11 @@ class ActivityPage extends React.Component {
     renderStudent() {
         return (
             <div>
-            <h2 style={{margin: '0px'}}>Activity Report</h2>
-            <div style={{margin: 'auto'}}>
-                <ActivityList generate={this.activities} />
-            </div>
+                <h2 style={{margin: '0px'}}>Score</h2>
+                <h2 style={{margin: '0px'}}>Activity Report</h2>
+                <div style={{margin: 'auto'}}>
+                    <ActivityList generate={this.activities} />
+                </div>
             </div>
         );
     }
