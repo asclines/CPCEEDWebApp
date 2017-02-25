@@ -39,6 +39,8 @@ function ActivityList(props) {
     );
 }
 
+
+
 class Activity {
 
 }
@@ -80,6 +82,11 @@ class ActivityPage extends React.Component {
         return (
             <div>
                 <h2 style={{margin: '0px'}}>Score</h2>
+                <div style={{margin: 'auto'}}>
+                    <ScoreList generate={this.score} />
+                </div>
+            </div>
+            <div>
                 <h2 style={{margin: '0px'}}>Activity Report</h2>
                 <div style={{margin: 'auto'}}>
                     <ActivityList generate={this.activities} />
