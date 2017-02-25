@@ -102,9 +102,20 @@ class ActivityPage extends React.Component {
     }
 }
 
-// Defining the permissions required to access this component
+/*
+    Defining the permissions required to access this component. This is a
+    JavaScript object, so it consists of comma separated key-value pairs.
+    The permissions defined here must already be defined in
+    `src/redux/actions.js`. But you do not have to use all permissions
+    defined in `actions.js`, just a subset that fits your situation.
+*/
 const requiredState = {
     viewActivity: true
 };
 
+<<<<<<< HEAD
 export default RequireAuth(ActivityPage, requiredState);
+=======
+// The permissions object is passed as the second argument to RequireAuth
+export default RequireAuth(Activity, requiredState);
+>>>>>>> origin/master
