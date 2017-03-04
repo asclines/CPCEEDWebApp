@@ -17,6 +17,25 @@ function ParseActivity(props) {
     );
 }
 
+function ParseScore(props) {
+    return (
+        <TableRow>
+            <td>{props.categories}</td>
+            <td>{props.points}</td>
+        </TableRow>
+    );
+}
+
+//Draws a table that displays the score of the user.  It requires properties "categories" and "points".
+function DrawScoreTable(props) {
+    var rows = [];
+    for (var i = 0; i < props.categories.length; i++) {
+        rows.push(<ParseScore categories={props.categories[i]} points={props.points[i]} key={i}/>)
+    }
+
+    return <tbody>{rows}</tbody>
+}
+
 //Generate the list of activities to view depending on the list provided
 function ActivityList(props) {
     return (
@@ -39,7 +58,20 @@ function ActivityList(props) {
     );
 }
 
-
+function ScoreList(props)
+{
+    return (
+        <Table>
+            <thead>
+                <tr>
+                    <th><center>Categories</center></th>
+                    <th><center>Score</center></th>
+                </tr>
+            </thead>
+            <DrawScoreTable categories={props.generate.categories} points={props.generate.points} />
+        </Table>
+    )
+}
 
 class Activity {
 
@@ -56,6 +88,7 @@ class ActivityPage extends React.Component {
 
         //The list of all activities that can be associated with the user provided
         this.activities = this.getActivities('')
+        this.score = this.getScore('')
     }
 
     //returns every pending activities of the user
@@ -65,6 +98,13 @@ class ActivityPage extends React.Component {
             pending: ['tempact1', 'tempact2', 'tempact3', 'tempact4'],
             confirmed: ['tempact5', 'tempact6']
         };
+    }
+
+    getScore(user) {
+        return {
+            categories: ['cat', 'cat','cat','cat','cat','cat','cat','cat','cat','cat'],
+            points: [1, 2, 1, 1, 1, 4, 6, 3, 2, 2]
+        }
     }
 
     //returns list of all activities stored in the database
@@ -81,15 +121,22 @@ class ActivityPage extends React.Component {
     renderStudent() {
         return (
             <div>
-                <h2 style={{margin: '0px'}}>Score</h2>
-                <div style={{margin: 'auto'}}>
-                    <ScoreList generate={this.score} />
+                <div className={'tab'}>
+                    
                 </div>
-            </div>
-            <div>
-                <h2 style={{margin: '0px'}}>Activity Report</h2>
-                <div style={{margin: 'auto'}}>
-                    <ActivityList generate={this.activities} />
+
+                <div>
+                    <h2 style={{margin: '0px'}}>Score</h2>
+                    <div>
+                        <ScoreList generate={this.score} />
+                    </div>
+                </div>
+
+                <div>
+                    <h2 style={{margin: '0px'}}>Activity Report</h2>
+                    <div style={{margin: 'auto'}}>
+                        <ActivityList generate={this.activities} />
+                    </div>
                 </div>
             </div>
         );
@@ -113,9 +160,4 @@ const requiredState = {
     viewActivity: true
 };
 
-<<<<<<< HEAD
 export default RequireAuth(ActivityPage, requiredState);
-=======
-// The permissions object is passed as the second argument to RequireAuth
-export default RequireAuth(Activity, requiredState);
->>>>>>> origin/master
