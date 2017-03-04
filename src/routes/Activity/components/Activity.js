@@ -4,6 +4,8 @@ import RequireAuth from 'components/Auth/RequireAuth.js';
 
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
+import Tabs from 'grommet/components/Tabs';
+import Tab from 'grommet/components/Tab';
 
 
 //returns the value used to display activity in list
@@ -91,6 +93,8 @@ class ActivityPage extends React.Component {
         //The list of all activities that can be associated with the user provided
         this.activities = this.getActivities(uid)
         this.score = this.getScore('')
+        this.index = 0
+        this.handleTabChange = this.handleTabChange.bind(this)
     }
 
     //returns every pending activities of the user
@@ -119,28 +123,32 @@ class ActivityPage extends React.Component {
         };
     }
 
+    handleTabChange(newIndex) {
+        this.index = newIndex
+    }
+
     //The render function for students
     renderStudent() {
+        var score = (
+            <Tab title="Score">
+                <ScoreList generate={this.score} />
+            </Tab>
+        )
+
+        var activities = (
+            <Tab title="Activities">
+                <ActivityList generate={this.activities} />
+            </Tab>
+        )
+
         return (
-            <div>
-                <div className={'tab'}>
-
-                </div>
-
-                <div>
-                    <h2 style={{margin: '0px'}}>Score</h2>
-                    <div>
-                        <ScoreList generate={this.score} />
-                    </div>
-                </div>
-
-                <div>
-                    <h2 style={{margin: '0px'}}>Activity Report</h2>
-                    <div style={{margin: 'auto'}}>
-                        <ActivityList generate={this.activities} />
-                    </div>
-                </div>
-            </div>
+            <Tabs
+                justify='center'
+                activeIndex={this.index}
+                onActive={(event) => {this.handleTabChange(event)}}>
+                {score}
+                {activities}
+            </Tabs>
         );
     }
 
