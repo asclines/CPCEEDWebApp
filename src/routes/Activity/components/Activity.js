@@ -7,6 +7,7 @@ import TableRow from 'grommet/components/TableRow';
 import TableHeader from 'grommet/components/TableHeader';
 import Tabs from 'grommet/components/Tabs';
 import Tab from 'grommet/components/Tab';
+import Button from 'grommet/components/Button';
 
 
 //returns the value used to display activity in list
@@ -24,7 +25,7 @@ function ParseScore(props) {
     return (
         <TableRow>
             <td>{props.categories}</td>
-            <td>{props.points}</td>
+            <td><center>{props.points}</center></td>
         </TableRow>
     );
 }
@@ -46,12 +47,12 @@ function ActivityList(props) {
             <thead>
                 <tr>
                     <th><center>Status</center></th>
-                    <th><center>Activity</center></th>
+                    <th width='80%'><center>Activity</center></th>
                 </tr>
             </thead>
             <tbody>
                 {props.generate.pending.map(function(value, iter) {
-                    return <ParseActivity activity={value} status={'pending'} key={iter} style={{bgcolor: '#EEEEEE'}}/>;
+                    return <ParseActivity activity={value} status={'pending'} key={iter}/>;
                 })}
                 {props.generate.confirmed.map(function(value, iter) {
                     return <ParseActivity activity={value} status={'confirmed'} key={iter} />
@@ -68,7 +69,7 @@ function ScoreList(props)
             <thead>
                 <tr>
                     <th><center>Categories</center></th>
-                    <th><center>Score</center></th>
+                    <th width='80%'><center>Score</center></th>
                 </tr>
             </thead>
             <DrawScoreTable categories={props.generate.categories} points={props.generate.points} />
@@ -147,13 +148,18 @@ class ActivityPage extends React.Component {
         )
 
         return (
-            <Tabs
-                justify='center'
-                activeIndex={this.state.index}
-                onActive={(event) => {this.handleTabChange(event)}}>
-                {score}
-                {activities}
-            </Tabs>
+            <div>
+                <Tabs
+                    justify='center'
+                    activeIndex={this.state.index}
+                    onActive={(event) => {this.handleTabChange(event)}}>
+                    {score}
+                    {activities}
+                </Tabs>
+                <Button>
+                    +
+                </Button>
+            </div>
         );
     }
 
