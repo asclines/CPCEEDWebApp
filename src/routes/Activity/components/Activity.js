@@ -1,7 +1,6 @@
 import React from 'react';
 
 import RequireAuth from 'components/Auth/RequireAuth.js';
-import Server from 'server/reports.js'
 
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
@@ -87,7 +86,7 @@ class ActivityPage extends React.Component {
     constructor(props) {
         super(props)
 
-        uid = '12345'
+        var uid = '12345'
 
         //The list of all activities that can be associated with the user provided
         this.activities = this.getActivities(uid)
@@ -96,12 +95,6 @@ class ActivityPage extends React.Component {
 
     //returns every pending activities of the user
     getActivities(user) {
-        Server.getReportByUid(user).then(function(reports) {
-
-        }).catch(function(error) {
-            console.log("Failed to catch the user's report")
-        })
-
         //currently returns a temporary list that represents the pending activities of the user
         return {
             pending: ['tempact1', 'tempact2', 'tempact3', 'tempact4'],
