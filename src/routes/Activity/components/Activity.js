@@ -4,6 +4,7 @@ import RequireAuth from 'components/Auth/RequireAuth.js';
 
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
+import TableHeader from 'grommet/components/TableHeader';
 import Tabs from 'grommet/components/Tabs';
 import Tab from 'grommet/components/Tab';
 
@@ -45,12 +46,12 @@ function ActivityList(props) {
             <thead>
                 <tr>
                     <th><center>Status</center></th>
-                    <th width={'80%'}><center>Activity</center></th>
+                    <th><center>Activity</center></th>
                 </tr>
             </thead>
             <tbody>
                 {props.generate.pending.map(function(value, iter) {
-                    return <ParseActivity activity={value} status={'pending'} key={iter} />;
+                    return <ParseActivity activity={value} status={'pending'} key={iter} style={{bgcolor: '#EEEEEE'}}/>;
                 })}
                 {props.generate.confirmed.map(function(value, iter) {
                     return <ParseActivity activity={value} status={'confirmed'} key={iter} />
@@ -90,10 +91,12 @@ class ActivityPage extends React.Component {
 
         var uid = '12345'
 
-        //The list of all activities that can be associated with the user provided
-        this.activities = this.getActivities(uid)
-        this.score = this.getScore('')
-        this.index = 0
+        this.state = {
+            index: 0,
+            activities: this.getActivities(uid),
+            score: this.getScore(uid),
+        }
+
         this.handleTabChange = this.handleTabChange.bind(this)
     }
 
@@ -123,28 +126,30 @@ class ActivityPage extends React.Component {
         };
     }
 
-    handleTabChange(newIndex) {
-        this.index = newIndex
+    handleTabChange(changed) {
+        this.setState({
+            index: changed
+        })
     }
 
     //The render function for students
     renderStudent() {
         var score = (
             <Tab title="Score">
-                <ScoreList generate={this.score} />
+                <ScoreList generate={this.state.score} />
             </Tab>
         )
 
         var activities = (
             <Tab title="Activities">
-                <ActivityList generate={this.activities} />
+                <ActivityList generate={this.state.activities} />
             </Tab>
         )
 
         return (
             <Tabs
                 justify='center'
-                activeIndex={this.index}
+                activeIndex={this.state.index}
                 onActive={(event) => {this.handleTabChange(event)}}>
                 {score}
                 {activities}
